@@ -1,8 +1,6 @@
 # Trabajo Final Integrador - Laboratorio de Python
 # Escenario 12: Gestión de supermercado
 
-# Diccionario global de productos.
-# Cada producto tiene nombre, precio y cantidad vendida.
 productos = {
     1: {"nombre": "Arroz 1kg", "precio": 1800.0, "vendidos": 0},
     2: {"nombre": "Leche 1L", "precio": 1200.0, "vendidos": 0},
@@ -12,28 +10,30 @@ productos = {
     6: {"nombre": "Yerba 1kg", "precio": 4200.0, "vendidos": 0}
 }
 
-# Variables globales para las estadísticas del día.
 clientes_atendidos = 0
 total_recaudado = 0.0
+numero_venta = 1
+
+# En esta lista se guarda el detalle de cada venta realizada.
+historial_ventas = []
 
 
 def mostrar_menu():
     """Muestra el menú principal del sistema."""
-    print("\n" + "=" * 45)
-    print("        SISTEMA DE CAJA - SUPERMERCADO")
-    print("=" * 45)
+    print("\n" + "=" * 50)
+    print("          SISTEMA DE CAJA - SUPERMERCADO")
+    print("=" * 50)
     print("1. Cargar nueva venta")
     print("2. Ver estadísticas")
     print("3. Ver catálogo")
     print("0. Salir")
-    print("=" * 45)
+    print("=" * 50)
 
 
 def leer_entero(mensaje):
     """
     Lee un número entero validado.
-    Se usa try/except para evitar que el programa se corte
-    si el usuario ingresa letras u otro dato incorrecto.
+    Evita que el programa falle si el usuario ingresa letras.
     """
     while True:
         try:
@@ -44,21 +44,33 @@ def leer_entero(mensaje):
 
 
 def mostrar_catalogo():
-    """Muestra los productos disponibles para vender."""
-    print("\n" + "-" * 45)
-    print("CATÁLOGO DE PRODUCTOS")
-    print("-" * 45)
-    print(f"{'Código':<8}{'Producto':<20}{'Precio':>10}")
-    print("-" * 45)
+    """
+    Muestra el catálogo de productos.
+    La pantalla queda abierta hasta que el usuario ingrese 0.
+    """
+    opcion = -1
 
-    for codigo, datos in productos.items():
-        print(
-            f"{codigo:<8}"
-            f"{datos['nombre']:<20}"
-            f"${datos['precio']:>9.2f}"
-        )
+    while opcion != 0:
+        print("\n" + "-" * 50)
+        print("CATÁLOGO DE PRODUCTOS")
+        print("-" * 50)
+        print(f"{'Código':<8}{'Producto':<22}{'Precio':>12}")
+        print("-" * 50)
 
-    print("-" * 45)
+        for codigo, datos in productos.items():
+            print(
+                f"{codigo:<8}"
+                f"{datos['nombre']:<22}"
+                f"${datos['precio']:>11.2f}"
+            )
+
+        print("-" * 50)
+        print("0. Volver al menú principal")
+
+        opcion = leer_entero("Ingrese 0 para volver: ")
+
+        if opcion != 0:
+            print("Opción incorrecta. Para volver ingrese 0.")
 
 
 def pedir_codigo_producto():
@@ -92,7 +104,7 @@ def pedir_cantidad():
 def agregar_al_carrito(carrito, codigo, cantidad):
     """
     Agrega un producto al carrito.
-    Si el producto ya estaba cargado, acumula la cantidad.
+    Si ya estaba cargado, suma la nueva cantidad.
     """
     if codigo in carrito:
         carrito[codigo] += cantidad
@@ -101,22 +113,18 @@ def agregar_al_carrito(carrito, codigo, cantidad):
 
 
 def calcular_subtotal(carrito):
-    """
-    Calcula el subtotal de la venta recorriendo el carrito.
-    """
+    """Calcula el subtotal de la venta."""
     subtotal = 0.0
 
     for codigo, cantidad in carrito.items():
-        precio = productos[codigo]["precio"]
-        subtotal += precio * cantidad
+        subtotal += productos[codigo]["precio"] * cantidad
 
     return subtotal
 
 
 def calcular_descuento(subtotal):
     """
-    Aplica un descuento simple:
-    si la compra supera los $10.000, se descuenta el 10%.
+    Aplica un 10% de descuento si el subtotal supera los $10.000.
     """
     if subtotal > 10000:
         descuento = subtotal * 0.10
@@ -126,10 +134,66 @@ def calcular_descuento(subtotal):
     return descuento
 
 
+def imprimir_ticket(carrito, subtotal, descuento, total_final):
+    """Imprime un ticket prolijo por consola."""
+    print("\n" + "=" * 60)
+    print("                    SUPERMERCADO PYTHON")
+    print("                       TICKET DE COMPRA")
+    print("=" * 60)
+    print(f"{'Producto':<22}{'Cant.':>8}{'Precio':>14}{'Total':>14}")
+    print("-" * 60)
+
+    for codigo, cantidad in carrito.items():
+        nombre = productos[codigo]["nombre"]
+        precio = productos[codigo]["precio"]
+        total_producto = precio * cantidad
+
+        print(
+            f"{nombre:<22}"
+            f"{cantidad:>8}"
+            f"${precio:>13.2f}"
+            f"${total_producto:>13.2f}"
+        )
+
+    print("-" * 60)
+    print(f"{'Subtotal:':<45}${subtotal:>12.2f}")
+    print(f"{'Descuento:':<45}${descuento:>12.2f}")
+    print(f"{'Total final:':<45}${total_final:>12.2f}")
+    print("=" * 60)
+    print("                 Gracias por su compra")
+    print("=" * 60)
+
+
+def guardar_venta_en_historial(carrito, total_final):
+    """
+    Guarda el detalle de la venta en el historial.
+    Esto permite ver después qué productos se compraron.
+    """
+    global numero_venta
+
+    detalle = []
+
+    for codigo, cantidad in carrito.items():
+        detalle.append({
+            "producto": productos[codigo]["nombre"],
+            "cantidad": cantidad,
+            "precio": productos[codigo]["precio"],
+            "total_producto": productos[codigo]["precio"] * cantidad
+        })
+
+    venta = {
+        "numero": numero_venta,
+        "detalle": detalle,
+        "total": total_final
+    }
+
+    historial_ventas.append(venta)
+    numero_venta += 1
+
+
 def actualizar_estadisticas(carrito, total_final):
     """
-    Actualiza los contadores y acumuladores globales.
-    También suma la cantidad vendida de cada producto.
+    Actualiza los acumuladores y contadores del sistema.
     """
     global clientes_atendidos
     global total_recaudado
@@ -141,48 +205,20 @@ def actualizar_estadisticas(carrito, total_final):
         productos[codigo]["vendidos"] += cantidad
 
 
-def imprimir_ticket(carrito, subtotal, descuento, total_final):
-    """
-    Imprime el ticket de la venta en consola.
-    Se usan formatos para que quede prolijo y fácil de leer.
-    """
-    print("\n" + "=" * 55)
-    print("                 SUPERMERCADO PYTHON")
-    print("                    TICKET DE COMPRA")
-    print("=" * 55)
-    print(f"{'Producto':<20}{'Cant.':>8}{'Precio':>12}{'Total':>12}")
-    print("-" * 55)
-
-    for codigo, cantidad in carrito.items():
-        nombre = productos[codigo]["nombre"]
-        precio = productos[codigo]["precio"]
-        total_producto = precio * cantidad
-
-        print(
-            f"{nombre:<20}"
-            f"{cantidad:>8}"
-            f"${precio:>11.2f}"
-            f"${total_producto:>11.2f}"
-        )
-
-    print("-" * 55)
-    print(f"{'Subtotal:':<40}${subtotal:>12.2f}")
-    print(f"{'Descuento:':<40}${descuento:>12.2f}")
-    print(f"{'Total final:':<40}${total_final:>12.2f}")
-    print("=" * 55)
-    print("          Gracias por su compra")
-    print("=" * 55)
-
-
 def cargar_nueva_venta():
     """
-    Controla todo el proceso de una venta:
-    muestra catálogo, carga productos, calcula importes,
-    imprime ticket y actualiza estadísticas.
+    Permite cargar una nueva venta completa.
+    El usuario puede ingresar varios productos hasta escribir 0.
     """
     carrito = {}
 
-    mostrar_catalogo()
+    print("\n" + "=" * 50)
+    print("NUEVA VENTA")
+    print("=" * 50)
+    print("Productos disponibles:")
+
+    for codigo, datos in productos.items():
+        print(f"{codigo}. {datos['nombre']} - ${datos['precio']:.2f}")
 
     while True:
         codigo = pedir_codigo_producto()
@@ -204,12 +240,12 @@ def cargar_nueva_venta():
 
     imprimir_ticket(carrito, subtotal, descuento, total_final)
     actualizar_estadisticas(carrito, total_final)
+    guardar_venta_en_historial(carrito, total_final)
 
 
 def obtener_producto_mas_vendido():
     """
-    Busca el producto más vendido del día.
-    Si no hubo ventas, devuelve un mensaje aclaratorio.
+    Calcula cuál fue el producto más vendido.
     """
     mayor_cantidad = 0
     nombre_producto = "No hubo ventas"
@@ -225,23 +261,77 @@ def obtener_producto_mas_vendido():
     return f"{nombre_producto} ({mayor_cantidad} unidades)"
 
 
+def mostrar_productos_vendidos():
+    """
+    Muestra cuánto se vendió de cada producto.
+    """
+    print("\nPRODUCTOS VENDIDOS")
+    print("-" * 50)
+    print(f"{'Producto':<25}{'Cantidad vendida':>18}")
+    print("-" * 50)
+
+    for datos in productos.values():
+        print(f"{datos['nombre']:<25}{datos['vendidos']:>18}")
+
+    print("-" * 50)
+
+
+def mostrar_historial_ventas():
+    """
+    Muestra el detalle de cada venta realizada.
+    """
+    print("\nHISTORIAL DE VENTAS")
+    print("-" * 50)
+
+    if len(historial_ventas) == 0:
+        print("Todavía no se realizaron ventas.")
+        print("-" * 50)
+        return
+
+    for venta in historial_ventas:
+        print(f"\nVenta N° {venta['numero']}")
+        print("-" * 50)
+
+        for item in venta["detalle"]:
+            print(
+                f"{item['producto']} - "
+                f"Cantidad: {item['cantidad']} - "
+                f"Total: ${item['total_producto']:.2f}"
+            )
+
+        print(f"Total de la venta: ${venta['total']:.2f}")
+
+
 def mostrar_estadisticas():
     """
-    Muestra las estadísticas generales del día.
+    Muestra las estadísticas generales.
+    La pantalla queda abierta hasta que el usuario ingrese 0.
     """
-    print("\n" + "=" * 45)
-    print("              ESTADÍSTICAS DEL DÍA")
-    print("=" * 45)
-    print(f"Clientes atendidos: {clientes_atendidos}")
-    print(f"Total recaudado: ${total_recaudado:.2f}")
-    print(f"Producto más vendido: {obtener_producto_mas_vendido()}")
-    print("=" * 45)
+    opcion = -1
+
+    while opcion != 0:
+        print("\n" + "=" * 55)
+        print("                  ESTADÍSTICAS DEL DÍA")
+        print("=" * 55)
+        print(f"Clientes atendidos: {clientes_atendidos}")
+        print(f"Total recaudado: ${total_recaudado:.2f}")
+        print(f"Producto más vendido: {obtener_producto_mas_vendido()}")
+        print("=" * 55)
+
+        mostrar_productos_vendidos()
+        mostrar_historial_ventas()
+
+        print("\n0. Volver al menú principal")
+        opcion = leer_entero("Ingrese 0 para volver: ")
+
+        if opcion != 0:
+            print("Opción incorrecta. Para volver ingrese 0.")
 
 
 def main():
     """
     Función principal del programa.
-    Mantiene activo el menú hasta que el usuario decide salir.
+    Mantiene el menú activo hasta que el usuario elige salir.
     """
     opcion = -1
 
