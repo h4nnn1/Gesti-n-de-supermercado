@@ -2,6 +2,8 @@ Integrantes del grupo: Dirie Cesar Luis, Frutos Agostina Madelein, Granich Erika
 
 Comisión: K1.2
 
+Grupo: B2
+
 Descripcion general del sistema: El sistema desarrollado es una solución de consola en Python diseñada para automatizar la gestión operativa de una caja de supermercado. El software permite centralizar las transacciones comerciales diarias, facilitando tanto el proceso de venta como el control de inventario.
 Las funcionalidades principales del sistema incluyen:
 Gestión de Ventas: Registro dinámico de productos mediante códigos, control de stock en tiempo real y aplicación de promociones comerciales (2x1 en artículos seleccionados).
