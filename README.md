@@ -9,7 +9,7 @@ Validaciones y Seguridad: Implementación de manejo de excepciones para garantiz
 Cálculo Automático: Procesamiento de subtotales, aplicación automática de descuentos por volumen (10% de descuento en compras superiores a $10.000) y cálculo preciso del total de cada ticket.
 Reporting y Estadísticas: Generación de un reporte diario que incluye la cantidad de clientes atendidos, el total recaudado, el desglose de ventas por producto, la identificación del producto "estrella" (más vendido) y un historial detallado de las operaciones realizadas.
 
-Instrucciones de ejecución: Asegurate de tener instalado Python en tu computadora.
-Descargá el código y abrí una terminal en esa carpeta.
-Ejecutalo con el comando: python main.py
-Seguí las opciones del menú que aparece en pantalla para cargar productos, ver ventas o cerrar el sistema.
+Instrucciones de ejecución: 1.Asegurate de tener instalado Python en tu computadora.
+2.Descargá el código y abrí una terminal en esa carpeta.
+3.Ejecutalo con el comando: python main.py
+4.Seguí las opciones del menú que aparece en pantalla para cargar productos, ver ventas o cerrar el sistema.
