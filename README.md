@@ -15,3 +15,14 @@ Instrucciones de ejecución: 1.Asegurate de tener instalado Python en tu computa
 2.Descargá el código y abrí una terminal en esa carpeta.
 3.Ejecutalo con el comando: python main.py
 4.Seguí las opciones del menú que aparece en pantalla para cargar productos, ver ventas o cerrar el sistema.
+
+Uso de Inteligencia Artificial
+
+Durante el desarrollo de este proyecto, hemos integrado herramientas de Inteligencia Artificial (ChatGPT y Google Gemini) como apoyo al aprendizaje y al proceso de desarrollo. El uso de estas herramientas se ha llevado a cabo bajo los siguientes criterios:
+
+* Organización del código: Utilizamos IA para consultar sugerencias sobre la modularización del sistema y cómo estructurar correctamente las funciones para cumplir con los estándares de limpieza y legibilidad solicitados en la cátedra.
+* Depuración y análisis de errores (Debugging): La IA fue utilizada como una herramienta de apoyo para identificar causas raíz ante errores de ejecución (como excepciones de tipo `ValueError` durante el ingreso de datos) y para comprender cómo implementar correctamente bloques de manejo de errores (`try/except`).
+* Buenas prácticas: Consultamos sobre la implementación de PEP8 y cómo optimizar la lógica de los acumuladores y contadores utilizados para las estadísticas del supermercado.
+
+Compromiso del equipo:
+Todo el equipo comprende integralmente la lógica implementada, el flujo de ejecución y las validaciones de datos presentes en el código fuente. La asistencia de la IA fue utilizada de forma crítica; cada sugerencia proporcionada fue analizada, validada y, en muchos casos, adaptada manualmente por nosotros para asegurar que el sistema cumpliera con las necesidades específicas del Escenario 12 y con las exigencias pedagógicas de la materia.
