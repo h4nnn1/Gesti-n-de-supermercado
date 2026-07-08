@@ -1,6 +1,6 @@
 # Trabajo Final Integrador - Laboratorio de Python
 
-# Algoritmos y Estructuras de Datos - IS
+# Algoritmos y Estructuras de Datos - ISI
 
 # Escenario 12: Gestión de supermercado
 # Diccionario global de productos.
