@@ -1,7 +1,8 @@
 # Trabajo Final Integrador - Laboratorio de Python
-# Algoritmos y Estructuras de Datos - ISI
-# Escenario 12: Gestión de supermercado
 
+# Algoritmos y Estructuras de Datos - ISI
+
+# Escenario 12: Gestión de supermercado
 # Diccionario global de productos.
 # Cada producto tiene nombre, precio, stock, unidades vendidas
 # y si tiene o no una promoción simple.
